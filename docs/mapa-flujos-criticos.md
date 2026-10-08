@@ -18,40 +18,9 @@ Primera parte del documento de casos de prueba (Semana 2).
 
 Es crítico porque el objetivo del sistema es vender: si este flujo falla, el cliente no puede comprar y la tienda no genera ingresos.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor C as Cliente (navegador)
-    participant S as Servidor PrestaShop
+![Diagrama cliente-servidor del flujo de compra](diagrama-flujo-compra.drawio.svg)
 
-    C->>S: GET /search?controller=search&s=shirt
-    S-->>C: 200 HTML con la lista de productos encontrados
-
-    C->>S: GET /1-1-hummingbird-printed-t-shirt.html
-    S-->>C: 200 HTML con el detalle (precio, talla, color, stock)
-
-    C->>S: POST /cart (id_product=1, group[1]=1, group[2]=8, qty=1, add=1, token)
-    S-->>C: 200 JSON {"success": true, "cart": {...}} y cookie de sesión actualizada
-
-    C->>S: POST /module/ps_shoppingcart/ajax
-    S-->>C: 200 Modal "Added to your cart" y contador del carrito en 1
-
-    C->>S: POST /login (email, password)
-    S-->>C: 302 Redirección a / con la sesión iniciada
-
-    C->>S: GET /order
-    S-->>C: 200 Checkout en 4 pasos (datos, direcciones, envío, pago)
-
-    Note over C,S: Los pasos de dirección y transportista se completan dentro del checkout
-    C->>S: POST /order (paso de pago con los términos aceptados)
-    S-->>C: 200 Pago listo para confirmar
-
-    C->>S: POST /module/ps_wirepayment/validation
-    S-->>C: 302 Redirección a la confirmación
-
-    C->>S: GET /order-confirmation?id_cart=7&id_module=13&id_order=6&key=…
-    S-->>C: 200 "Your order is confirmed", referencia TCPDKGKBS, total €31.34
-```
+El diagrama está hecho en draw.io: el archivo [`diagrama-flujo-compra.drawio.svg`](diagrama-flujo-compra.drawio.svg) se ve como imagen en GitHub y se puede editar en [app.diagrams.net](https://app.diagrams.net) (Archivo → Abrir desde → Dispositivo o GitHub) o con la extensión *Draw.io Integration* de VS Code.
 
 **Paso a paso**
 
