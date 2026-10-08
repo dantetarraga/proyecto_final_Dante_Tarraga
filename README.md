@@ -24,5 +24,6 @@ Cada visita a la demo crea una instancia temporal con datos de ejemplo, así que
 | Semana | Entregable | Archivo |
 |---|---|---|
 | 1 | Documento de alcance de calidad | [docs/Documento de Alcance de Calidad — PrestaShop.docx](docs/Documento%20de%20Alcance%20de%20Calidad%20%E2%80%94%20PrestaShop.docx) |
+| 2 | Mapa de flujos críticos (diagrama cliente-servidor, endpoints y plantilla de caso) | [docs/mapa-flujos-criticos.md](docs/mapa-flujos-criticos.md) |
 | 2 | Casos de prueba manuales v1 | Pendiente |
 | 3 | Plan de pruebas, matriz de trazabilidad y reporte de defectos | Pendiente |
