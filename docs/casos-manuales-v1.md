@@ -12,6 +12,8 @@ Segunda parte del documento de casos de prueba (Semana 2). Continúa el [mapa de
 | Navegador | Google Chrome 155 (escritorio) |
 | Autor | Dante Tárraga |
 
+**Versión en imagen** (una por sección): [1. Análisis del campo](casos-manuales-v1-1-analisis-campo.png) · [2. Escenarios](casos-manuales-v1-2-escenarios.png) · [3. Defectos](casos-manuales-v1-3-defectos.png) · [4. Validación con IA](casos-manuales-v1-4-validacion-ia.png)
+
 ---
 
 ## 1. Elección y análisis del campo
