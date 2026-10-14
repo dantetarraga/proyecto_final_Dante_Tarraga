@@ -8,7 +8,7 @@ Campo elegido: cantidad del carrito (M04 My Cart).
 - Fecha: 09-oct-2026
 - Autor: Dante Tárraga
 
-Versión en imagen: [1. Campo](casos-manuales-v1-1-analisis-campo.png) · [2. Escenarios](casos-manuales-v1-2-escenarios.png) · [3. Defectos](casos-manuales-v1-3-defectos.png) · [4. Validación con IA](casos-manuales-v1-4-validacion-ia.png)
+Versión en imagen: [1. Campo](evidencias/casos-manuales-v1-1-analisis-campo.png) · [2. Escenarios](evidencias/casos-manuales-v1-2-escenarios.png) · [3. Defectos](evidencias/casos-manuales-v1-3-defectos.png) · [4. Validación con IA](evidencias/casos-manuales-v1-4-validacion-ia.png)
 
 ## 1. Campo y regla
 
