@@ -1,6 +1,6 @@
 # Sesión exploratoria 1
 
-Sesión con charter, tiempo fijo y notas etiquetadas (session-based test management). Cubre el hueco R6 de la [matriz de trazabilidad](matriz-trazabilidad-v1.md): el registro de cuenta no tiene casos.
+Sesión con charter, tiempo fijo y notas etiquetadas (session-based test management). Cubre el hueco R6 de la [matriz de trazabilidad](Matriz%20de%20trazabilidad%20v1%20%E2%80%94%20PrestaShop.docx): el registro de cuenta no tiene casos.
 
 - Instancia: [por completar: URL de la demo]
 - Navegador: Chrome 155 (escritorio)
@@ -30,7 +30,7 @@ Etiquetas: **D** defecto · **P** pregunta · **I** idea · **O** observación. 
 
 ## Defectos que salieron de la sesión
 
-Cada nota D se reproduce desde cero, se registra en Jira citando este charter y se agrega al [reporte de defectos](reporte-defectos-v1.md).
+Cada nota D se reproduce desde cero, se registra en Jira citando este charter y se agrega al [reporte de defectos](Reporte%20de%20defectos%20v1%20%E2%80%94%20PrestaShop.docx).
 
 | Nota | Defecto | Jira |
 |---|---|---|
