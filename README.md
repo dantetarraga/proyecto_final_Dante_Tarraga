@@ -31,4 +31,5 @@ Cada visita a la demo crea una instancia temporal con datos de ejemplo, así que
 | 2 | Registro en Jira (proyecto PS: casos de prueba, defectos y Sprint 1) | [Tablero de Jira](https://dantetarraga.atlassian.net/jira/software/projects/PS/boards/2) |
 | 3 | Matriz de trazabilidad v1 (7 requisitos, casos, defectos y cobertura) | [docs/matriz-trazabilidad-v1.md](docs/matriz-trazabilidad-v1.md) |
 | 3 | Reporte de defectos v1 (5 defectos con pasos, evidencia, severidad y requisito) | [docs/reporte-defectos-v1.md](docs/reporte-defectos-v1.md) |
-| 3 | Plan de pruebas v1 | Pendiente |
+| 3 | Plan de pruebas v1 (alcance, enfoque, criterios verificables, entorno, cronograma y riesgos) | [docs/plan-de-pruebas-v1.md](docs/plan-de-pruebas-v1.md) |
+| 3 | Sesión exploratoria 1 (charter sobre el registro de cuenta; notas por completar) | [docs/sesion-exploratoria-1.md](docs/sesion-exploratoria-1.md) |
