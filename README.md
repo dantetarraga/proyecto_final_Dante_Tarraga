@@ -29,4 +29,6 @@ Cada visita a la demo crea una instancia temporal con datos de ejemplo, así que
 | 2 | Pruebas de accesibilidad y usabilidad v1 (cinco pruebas rápidas sobre el flujo de compra y hallazgos) | [docs/accesibilidad-usabilidad-v1.md](docs/accesibilidad-usabilidad-v1.md) (también en imagen: `docs/evidencias/accesibilidad-usabilidad-v1.png`) |
 | 2 | **Documento de casos de prueba manuales v1** (entregable: flujos, 12 casos, defectos, accesibilidad, Jira y uso de IA) | [docs/Casos de prueba manuales v1 — PrestaShop.docx](docs/Casos%20de%20prueba%20manuales%20v1%20%E2%80%94%20PrestaShop.docx) |
 | 2 | Registro en Jira (proyecto PS: casos de prueba, defectos y Sprint 1) | [Tablero de Jira](https://dantetarraga.atlassian.net/jira/software/projects/PS/boards/2) |
-| 3 | Plan de pruebas, matriz de trazabilidad y reporte de defectos | Pendiente |
+| 3 | Matriz de trazabilidad v1 (7 requisitos, casos, defectos y cobertura) | [docs/matriz-trazabilidad-v1.md](docs/matriz-trazabilidad-v1.md) |
+| 3 | Reporte de defectos v1 (5 defectos con pasos, evidencia, severidad y requisito) | [docs/reporte-defectos-v1.md](docs/reporte-defectos-v1.md) |
+| 3 | Plan de pruebas v1 | Pendiente |
