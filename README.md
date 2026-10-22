@@ -23,7 +23,8 @@ proyecto_final_Dante_Tarraga/
 │   ├── Casos de prueba manuales v1 — PrestaShop.docx       Semana 2 · entregable
 │   ├── casos-manuales-v1.md                                Semana 2 · campo cantidad del carrito
 │   ├── accesibilidad-usabilidad-v1.md                      Semana 2 · cinco pruebas rápidas
-│   ├── sesion-exploratoria-1.md                            Semana 3 · sesión exploratoria del registro
+│   ├── casos-catalogo-v1.md                                Semana 3 · casos del catálogo
+│   ├── sesion-exploratoria-1.md                            Semana 3 · sesión exploratoria
 │   ├── Plan de pruebas v1 — PrestaShop.docx                Semana 3 · entregable
 │   ├── Matriz de trazabilidad v1 — PrestaShop.docx         Semana 3 · entregable
 │   ├── Reporte de defectos v1 — PrestaShop.docx            Semana 3 · entregable
@@ -41,21 +42,22 @@ proyecto_final_Dante_Tarraga/
 | 2 | Casos de prueba manuales v1 (campo cantidad del carrito: clases, escenarios y defectos) | [casos-manuales-v1.md](docs/casos-manuales-v1.md) (también en imágenes: `docs/evidencias/casos-manuales-v1-*.png`) |
 | 2 | Pruebas de accesibilidad y usabilidad v1 (cinco pruebas rápidas sobre el flujo de compra) | [accesibilidad-usabilidad-v1.md](docs/accesibilidad-usabilidad-v1.md) (también en imagen: `docs/evidencias/accesibilidad-usabilidad-v1.png`) |
 | 2 | Registro en Jira (proyecto PS: casos de prueba, defectos y Sprint 1) | [Tablero de Jira](https://dantetarraga.atlassian.net/jira/software/projects/PS/boards/2) (capturas: `docs/evidencias/JIRA-*.png`) |
-| 3 | **Plan de pruebas v1** (v1.1: alcance, enfoque, criterios verificables, entorno, cronograma y riesgos) | [Plan de pruebas v1 — PrestaShop.docx](docs/Plan%20de%20pruebas%20v1%20%E2%80%94%20PrestaShop.docx) |
-| 3 | **Matriz de trazabilidad v1** (7 requisitos, casos, defectos, cobertura del 71 % y huecos) | [Matriz de trazabilidad v1 — PrestaShop.docx](docs/Matriz%20de%20trazabilidad%20v1%20%E2%80%94%20PrestaShop.docx) |
-| 3 | **Reporte de defectos v1** (7 defectos con pasos, evidencia, severidad, requisito y Jira; un hallazgo en dos versiones) | [Reporte de defectos v1 — PrestaShop.docx](docs/Reporte%20de%20defectos%20v1%20%E2%80%94%20PrestaShop.docx) |
-| 3 | **Tabla de decisión v1** (registro de cuenta: 3 condiciones, 8 combinaciones, 4 reglas y 4 casos) | [Tabla de decisión v1 — PrestaShop.docx](docs/Tabla%20de%20decisi%C3%B3n%20v1%20%E2%80%94%20PrestaShop.docx) |
-| 3 | Sesión exploratoria 1 (charter sobre el registro de cuenta, notas etiquetadas y 2 defectos) | [sesion-exploratoria-1.md](docs/sesion-exploratoria-1.md) (capturas: `docs/evidencias/DEF-M01-*.png`) |
+| 3 | **Plan de pruebas v1** (alcance, enfoque, criterios, entorno, cronograma y riesgos) | [Plan de pruebas v1 — PrestaShop.docx](docs/Plan%20de%20pruebas%20v1%20%E2%80%94%20PrestaShop.docx) |
+| 3 | **Matriz de trazabilidad v1** (7 requisitos, cobertura del 86 %) | [Matriz de trazabilidad v1 — PrestaShop.docx](docs/Matriz%20de%20trazabilidad%20v1%20%E2%80%94%20PrestaShop.docx) |
+| 3 | **Reporte de defectos v1** (8 defectos y un hallazgo en dos versiones) | [Reporte de defectos v1 — PrestaShop.docx](docs/Reporte%20de%20defectos%20v1%20%E2%80%94%20PrestaShop.docx) |
+| 3 | **Tabla de decisión v1** (registro de cuenta: 3 condiciones y 4 casos) | [Tabla de decisión v1 — PrestaShop.docx](docs/Tabla%20de%20decisi%C3%B3n%20v1%20%E2%80%94%20PrestaShop.docx) |
+| 3 | Sesión exploratoria 1 (registro de cuenta, 2 defectos) | [sesion-exploratoria-1.md](docs/sesion-exploratoria-1.md) (capturas: `docs/evidencias/DEF-M01-*.png`) |
+| 3 | Casos del catálogo v1 (18 casos, 1 defecto) | [casos-catalogo-v1.md](docs/casos-catalogo-v1.md) (capturas: `docs/evidencias/DEF-M02-*.png` y `CC-*.png`) |
 
 ## Estado al 21-oct-2026
 
 | Indicador | Valor |
 |---|---|
-| Casos ejecutados | 13: 12 del carrito (4 pasaron, 8 fallaron) y 1 de la tabla de decisión (pasó); 3 por ejecutar |
+| Casos ejecutados | 31: 21 pasaron y 10 fallaron (3 más por ejecutar) |
 | Pruebas de accesibilidad | 5 pruebas rápidas: 2 pasaron, 3 fallaron |
-| Sesiones exploratorias | 1 (registro de cuenta, 21-oct-2026): 2 defectos |
-| Defectos documentados | 7 (DEF-01 a DEF-04, A11Y-01 a A11Y-03); 5 en Jira, DEF-03 y DEF-04 por registrar |
-| Cobertura de requisitos | 5 de 7 (71 %); sin casos: compra completa y catálogo |
+| Sesiones exploratorias | 1 (registro de cuenta) |
+| Defectos documentados | 8: 5 en Jira y 3 por registrar |
+| Cobertura de requisitos | 6 de 7 (86 %); falta la compra completa |
 
 ## Flujo de trabajo
 
