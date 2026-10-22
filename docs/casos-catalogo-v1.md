@@ -63,7 +63,8 @@ Resultado: 16 pasaron y 2 fallaron.
 - Pasos: escribir "dragon" en el buscador y pulsar Enter.
 - Esperado: "No search results for "dragon"".
 - Obtenido: muestra los 19 productos de la tienda. También pasa con "perro", "qwerty" y "xyz123". Con "kkkkkkkk" sí sale "No search results".
-- Nota: puede ser la búsqueda aproximada de PrestaShop. Es una suposición: lo reviso en la documentación antes de registrarlo.
+- Nota: puede ser la búsqueda aproximada de PrestaShop. Es una suposición: no hay acceso a la configuración.
+- Jira: PS-22 (reproducido en otra instancia el 21-oct).
 - Evidencia: [resultados](evidencias/DEF-M02-005-busqueda-dragon-19-productos.png) y [sugerencias](evidencias/DEF-M02-005-busqueda-dragon-sugerencias.png)
 
 ## 5. Observaciones (no las reporto todavía)
@@ -74,4 +75,4 @@ Resultado: 16 pasaron y 2 fallaron.
 
 ## 6. Uso de la IA
 
-Los casos los diseñó y ejecutó un agente de IA (Claude) en Chrome. Reviso los resultados antes de registrar DEF-05 en Jira.
+Los casos los diseñó y ejecutó un agente de IA (Claude) en Chrome.

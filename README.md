@@ -24,6 +24,7 @@ proyecto_final_Dante_Tarraga/
 │   ├── casos-manuales-v1.md                                Semana 2 · campo cantidad del carrito
 │   ├── accesibilidad-usabilidad-v1.md                      Semana 2 · cinco pruebas rápidas
 │   ├── casos-catalogo-v1.md                                Semana 3 · casos del catálogo
+│   ├── casos-checkout-v1.md                                Semana 3 · checkout y compra completa
 │   ├── sesion-exploratoria-1.md                            Semana 3 · sesión exploratoria
 │   ├── Plan de pruebas v1 — PrestaShop.docx                Semana 3 · entregable
 │   ├── Matriz de trazabilidad v1 — PrestaShop.docx         Semana 3 · entregable
@@ -43,21 +44,22 @@ proyecto_final_Dante_Tarraga/
 | 2 | Pruebas de accesibilidad y usabilidad v1 (cinco pruebas rápidas sobre el flujo de compra) | [accesibilidad-usabilidad-v1.md](docs/accesibilidad-usabilidad-v1.md) (también en imagen: `docs/evidencias/accesibilidad-usabilidad-v1.png`) |
 | 2 | Registro en Jira (proyecto PS: casos de prueba, defectos y Sprint 1) | [Tablero de Jira](https://dantetarraga.atlassian.net/jira/software/projects/PS/boards/2) (capturas: `docs/evidencias/JIRA-*.png`) |
 | 3 | **Plan de pruebas v1** (alcance, enfoque, criterios, entorno, cronograma y riesgos) | [Plan de pruebas v1 — PrestaShop.docx](docs/Plan%20de%20pruebas%20v1%20%E2%80%94%20PrestaShop.docx) |
-| 3 | **Matriz de trazabilidad v1** (7 requisitos, cobertura del 86 %) | [Matriz de trazabilidad v1 — PrestaShop.docx](docs/Matriz%20de%20trazabilidad%20v1%20%E2%80%94%20PrestaShop.docx) |
+| 3 | **Matriz de trazabilidad v1** (7 requisitos, cobertura del 100 %) | [Matriz de trazabilidad v1 — PrestaShop.docx](docs/Matriz%20de%20trazabilidad%20v1%20%E2%80%94%20PrestaShop.docx) |
 | 3 | **Reporte de defectos v1** (8 defectos y un hallazgo en dos versiones) | [Reporte de defectos v1 — PrestaShop.docx](docs/Reporte%20de%20defectos%20v1%20%E2%80%94%20PrestaShop.docx) |
 | 3 | **Tabla de decisión v1** (registro de cuenta: 3 condiciones y 4 casos) | [Tabla de decisión v1 — PrestaShop.docx](docs/Tabla%20de%20decisi%C3%B3n%20v1%20%E2%80%94%20PrestaShop.docx) |
 | 3 | Sesión exploratoria 1 (registro de cuenta, 2 defectos) | [sesion-exploratoria-1.md](docs/sesion-exploratoria-1.md) (capturas: `docs/evidencias/DEF-M01-*.png`) |
 | 3 | Casos del catálogo v1 (18 casos, 1 defecto) | [casos-catalogo-v1.md](docs/casos-catalogo-v1.md) (capturas: `docs/evidencias/DEF-M02-*.png` y `CC-*.png`) |
+| 3 | Casos del checkout v1 (9 casos y compra completa) | [casos-checkout-v1.md](docs/casos-checkout-v1.md) (captura del pedido: `docs/evidencias/CK-09-*.png`) |
 
 ## Estado al 21-oct-2026
 
 | Indicador | Valor |
 |---|---|
-| Casos ejecutados | 31: 21 pasaron y 10 fallaron (3 más por ejecutar) |
+| Casos ejecutados | 40: 29 pasaron y 11 fallaron (3 más por ejecutar) |
 | Pruebas de accesibilidad | 5 pruebas rápidas: 2 pasaron, 3 fallaron |
 | Sesiones exploratorias | 1 (registro de cuenta) |
-| Defectos documentados | 8: 5 en Jira y 3 por registrar |
-| Cobertura de requisitos | 6 de 7 (86 %); falta la compra completa |
+| Defectos documentados | 8, todos en Jira (PS-3, PS-4 y PS-17 a PS-22) |
+| Cobertura de requisitos | 7 de 7 (100 %) |
 
 ## Flujo de trabajo
 

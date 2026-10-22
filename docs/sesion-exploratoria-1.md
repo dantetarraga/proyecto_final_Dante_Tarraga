@@ -35,7 +35,7 @@ D = defecto · P = pregunta · I = idea · O = observación
 | 19:24 | P | Se acepta una fecha de nacimiento igual a hoy. ¿Debería haber una edad mínima? |
 | 19:24 | O | Sin una casilla obligatoria sale "Required field" en esa casilla. Si fallan varias cosas, salen todos los errores juntos. |
 | 19:26 | O | Para la tabla de decisión probé las 4 combinaciones de casillas con un nombre inválido: en ninguna se crea la cuenta. |
-| 19:27 | I | Probar "ana@" en el formulario de invitado del checkout. |
+| 19:27 | I | Probar "ana@" en el formulario de invitado del checkout. (Hecho el 21-oct: también da error 500, caso CK-01.) |
 | 19:28 | I | Repetir la sesión con una contraseña válida. |
 
 ## Balance de tiempo
@@ -48,16 +48,17 @@ D = defecto · P = pregunta · I = idea · O = observación
 
 | Nota | Defecto | Jira |
 |---|---|---|
-| 19:23 | DEF-03 · Un correo que termina en "@" da error 500 ([captura 1](evidencias/DEF-M01-003-correo-incompleto-respuesta-500.png), [captura 2](evidencias/DEF-M01-003-correo-incompleto-bloqueo-navegador.png)) | Por registrar |
-| 19:24 | DEF-04 · Una fecha futura da un mensaje de formato ([captura](evidencias/DEF-M01-004-fecha-futura-mensaje-formato.png)) | Por registrar |
+| 19:23 | DEF-03 · Un correo que termina en "@" da error 500 ([captura 1](evidencias/DEF-M01-003-correo-incompleto-respuesta-500.png), [captura 2](evidencias/DEF-M01-003-correo-incompleto-bloqueo-navegador.png)) | PS-20 |
+| 19:24 | DEF-04 · Una fecha futura da un mensaje de formato ([captura](evidencias/DEF-M01-004-fecha-futura-mensaje-formato.png)) | PS-21 |
 
 ## No alcancé a probar
 
 - La contraseña (largo y nivel de seguridad).
 - El correo repetido.
 - Crear la cuenta, entrar y salir.
-- "ana@" en el checkout como invitado.
+
+Estos puntos necesitan una contraseña. Los hace el autor en la sesión exploratoria 2.
 
 ## Uso de la IA
 
-La sesión la hizo un agente de IA (Claude) en Chrome. Antes de registrar DEF-03 y DEF-04 en Jira, los reproduzco yo en una instancia nueva.
+La sesión la hizo un agente de IA (Claude) en Chrome. DEF-03 y DEF-04 se reprodujeron en una instancia nueva (previous-wrist, 21-oct) y están en Jira como PS-20 y PS-21.
