@@ -34,7 +34,9 @@ proyecto_final_Dante_Tarraga/
 ├── playwright.config.ts                             Módulo 2 · configuración de Playwright
 └── test/                                            Módulo 2 · pruebas automatizadas
     ├── e2e/            specs: login.spec.ts y carrito.spec.ts
-    ├── pages/          Page Objects (LoginPage, MyAccountPage, ProductPage)
+    ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, CartPage)
+    ├── components/     componentes compartidos (HeaderComponent, CartModalComponent)
+    ├── fixtures/       test extendido con los Page Objects y la fixture loggedIn
     └── data/           datos de prueba (cliente desde .env, producto y variantes)
 ```
 
@@ -52,6 +54,7 @@ npm test
 | Comando | Uso |
 |---|---|
 | `npm test` | Corre toda la suite sin interfaz |
+| `npm run test:smoke` | Solo las pruebas etiquetadas `@smoke` |
 | `npm run test:headed` | Corre la suite con el navegador visible |
 | `npm run report` | Abre el último reporte HTML |
 | `npm run typecheck` | Revisa los tipos de TypeScript |
@@ -62,10 +65,11 @@ npm test
 
 | Spec | Caso |
 |---|---|
-| `login.spec.ts` | Login con credenciales válidas |
+| `login.spec.ts` | Login con credenciales válidas (`@smoke`) |
 | `login.spec.ts` | Login con contraseña incorrecta muestra "Authentication failed." |
-| `carrito.spec.ts` | Agregar el producto con la variante por defecto |
-| `carrito.spec.ts` | Agregar talla M, color Black y 2 unidades |
+| `carrito.spec.ts` | Visitante agrega el producto con la variante por defecto (`@smoke`) |
+| `carrito.spec.ts` | Visitante agrega talla M, color Black y 2 unidades |
+| `carrito.spec.ts` | Cliente con sesión iniciada agrega el producto y lo ve en el carrito (`@smoke`) |
 
 ## Entregables
 
