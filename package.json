@@ -1,0 +1,31 @@
+{
+  "name": "proyecto_final_dante_tarraga",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Proyecto final del curso QA Automatizador: pruebas sobre la demo de PrestaShop",
+  "author": "Dante Tárraga",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dantetarraga/proyecto_final_Dante_Tarraga.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dantetarraga/proyecto_final_Dante_Tarraga/issues"
+  },
+  "homepage": "https://github.com/dantetarraga/proyecto_final_Dante_Tarraga#readme",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
+    "dotenv": "^18.0.9",
+    "typescript": "^7.0.2"
+  }
+}

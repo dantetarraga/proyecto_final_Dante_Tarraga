@@ -1,2 +1,14 @@
 /utils
 ~$*
+
+# Node
+node_modules/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Variables de entorno locales
+.env
