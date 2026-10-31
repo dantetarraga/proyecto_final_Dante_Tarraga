@@ -1,18 +1,32 @@
 import { expect, test } from '@playwright/test';
+import { hummingbirdTShirt, type ProductVariant } from '../data/products';
+import { ProductPage } from '../pages/ProductPage';
 
 test.describe('Agregar al carrito', () => {
+  let productPage: ProductPage;
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('/1-1-hummingbird-printed-t-shirt.html');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hummingbird printed t-shirt');
+    productPage = new ProductPage(page);
+    await productPage.goto();
+    await expect(productPage.name).toHaveText(hummingbirdTShirt.name);
   });
 
-  test('agrega el producto con la variante por defecto', async ({ page }) => {
-    await page.getByRole('button', { name: /Add to cart/ }).click();
+  test('agrega el producto con la variante por defecto', async () => {
+    await productPage.addToCart();
 
-    const modal = page.getByRole('dialog', { name: 'Added to your cart' });
-    await expect(modal).toBeVisible();
-    await expect(modal).toContainText('Hummingbird printed t-shirt');
-    await expect(modal).toContainText('Quantity: 1');
-    await expect(page.locator('.blockcart .header-block__badge')).toHaveText('1');
+    await expect(productPage.cartModal).toContainText(hummingbirdTShirt.name);
+    await expect(productPage.cartModal).toContainText('Quantity: 1');
+    await expect(productPage.cartBadge).toHaveText('1');
+  });
+
+  test('agrega una variante elegida con varias unidades', async () => {
+    const variant: ProductVariant = { size: 'M', color: 'Black', quantity: 2 };
+
+    await productPage.addToCart(variant);
+
+    await expect(productPage.cartModal).toContainText(`Size: ${variant.size}`);
+    await expect(productPage.cartModal).toContainText(`Color: ${variant.color}`);
+    await expect(productPage.cartModal).toContainText(`Quantity: ${variant.quantity}`);
+    await expect(productPage.cartBadge).toHaveText(String(variant.quantity));
   });
 });

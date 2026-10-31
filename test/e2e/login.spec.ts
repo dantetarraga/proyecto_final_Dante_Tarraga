@@ -1,21 +1,30 @@
 import { expect, test } from '@playwright/test';
+import { defaultCustomer, wrongPassword } from '../data/customers';
+import { LoginPage } from '../pages/LoginPage';
+import { MyAccountPage } from '../pages/MyAccountPage';
 
 test.describe('Login', () => {
+  let loginPage: LoginPage;
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('/login?back=my-account');
-    await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
+    loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await expect(loginPage.heading).toBeVisible();
   });
 
   test('inicia sesión con credenciales válidas', async ({ page }) => {
-    const form = page.locator('#login-form');
+    const myAccountPage = new MyAccountPage(page);
 
-    await form.getByRole('textbox', { name: 'Email' }).fill(process.env.CUSTOMER_EMAIL!);
-    await form.getByRole('textbox', { name: 'Password' }).fill(process.env.CUSTOMER_PASSWORD!);
-    await form.getByRole('button', { name: 'Sign in' }).click();
+    await loginPage.login(defaultCustomer.email, defaultCustomer.password);
 
     await expect(page).toHaveURL(/\/my-account$/);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-      `Welcome ${process.env.CUSTOMER_NAME}`,
-    );
+    await expect(myAccountPage.heading).toHaveText(`Welcome ${defaultCustomer.fullName}`);
+  });
+
+  test('rechaza una contraseña incorrecta', async ({ page }) => {
+    await loginPage.login(defaultCustomer.email, wrongPassword);
+
+    await expect(page).toHaveURL(/\/login/);
+    await expect(loginPage.errorAlert).toHaveText('Authentication failed.');
   });
 });

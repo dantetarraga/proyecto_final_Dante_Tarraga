@@ -32,8 +32,10 @@ proyecto_final_Dante_Tarraga/
 │   ├── Tabla de decisión v1 — PrestaShop.docx              Semana 3 · entregable
 │   └── evidencias/                                         capturas de defectos, hallazgos y Jira
 ├── playwright.config.ts                             Módulo 2 · configuración de Playwright
-└── test/
-    └── e2e/                                         Módulo 2 · login.spec.ts y carrito.spec.ts
+└── test/                                            Módulo 2 · pruebas automatizadas
+    ├── e2e/            specs: login.spec.ts y carrito.spec.ts
+    ├── pages/          Page Objects (LoginPage, MyAccountPage, ProductPage)
+    └── data/           datos de prueba (cliente desde .env, producto y variantes)
 ```
 
 ## Pruebas automatizadas (Playwright)
@@ -61,7 +63,9 @@ npm test
 | Spec | Caso |
 |---|---|
 | `login.spec.ts` | Login con credenciales válidas |
+| `login.spec.ts` | Login con contraseña incorrecta muestra "Authentication failed." |
 | `carrito.spec.ts` | Agregar el producto con la variante por defecto |
+| `carrito.spec.ts` | Agregar talla M, color Black y 2 unidades |
 
 ## Entregables
 
