@@ -31,8 +31,37 @@ proyecto_final_Dante_Tarraga/
 │   ├── Reporte de defectos v1 — PrestaShop.docx            Semana 3 · entregable
 │   ├── Tabla de decisión v1 — PrestaShop.docx              Semana 3 · entregable
 │   └── evidencias/                                         capturas de defectos, hallazgos y Jira
-└── test/                                            scripts de prueba (desde el Módulo 2)
+├── playwright.config.ts                             Módulo 2 · configuración de Playwright
+└── test/
+    └── e2e/                                         Módulo 2 · login.spec.ts y carrito.spec.ts
 ```
+
+## Pruebas automatizadas (Playwright)
+
+Requisitos: Node.js 20 o superior (el repositorio trae `.nvmrc` con la versión 24). Las pruebas corren solo en Chromium.
+
+```bash
+npm install
+npx playwright install chromium
+cp .env.example .env
+npm test
+```
+
+| Comando | Uso |
+|---|---|
+| `npm test` | Corre toda la suite sin interfaz |
+| `npm run test:headed` | Corre la suite con el navegador visible |
+| `npm run report` | Abre el último reporte HTML |
+| `npm run typecheck` | Revisa los tipos de TypeScript |
+
+**URL de la tienda.** La demo crea una instancia temporal por visita. Abre https://demo.prestashop.com en el navegador, copia la URL de la tienda (por ejemplo `https://algo-algo.demo.prestashop.com`) en `BASE_URL` del `.env` y deja esa pestaña abierta mientras corren las pruebas: al cerrarla, la instancia se apaga.
+
+**Credenciales.** Las pruebas usan el cliente de ejemplo de la demo (`pub@prestashop.com`), configurado en `.env`. El archivo `.env` no se versiona.
+
+| Spec | Caso |
+|---|---|
+| `login.spec.ts` | Login con credenciales válidas |
+| `carrito.spec.ts` | Agregar el producto con la variante por defecto |
 
 ## Entregables
 
