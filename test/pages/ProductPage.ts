@@ -1,23 +1,24 @@
 import type { Locator, Page } from '@playwright/test';
+import { CartModalComponent } from '../components/CartModalComponent';
 import { hummingbirdTShirt, type ProductVariant } from '../data/products';
+import { BasePage } from './BasePage';
 
-export class ProductPage {
+export class ProductPage extends BasePage {
+  readonly cartModal: CartModalComponent;
   readonly name: Locator;
   readonly sizeSelect: Locator;
   readonly colorOptions: Locator;
   readonly quantityInput: Locator;
   readonly addToCartButton: Locator;
-  readonly cartBadge: Locator;
-  readonly cartModal: Locator;
 
-  constructor(private readonly page: Page) {
+  constructor(page: Page) {
+    super(page);
+    this.cartModal = new CartModalComponent(page);
     this.name = page.getByRole('heading', { level: 1 });
     this.sizeSelect = page.getByRole('combobox', { name: 'Size' });
     this.colorOptions = page.getByRole('radiogroup', { name: 'Color' });
     this.quantityInput = page.getByRole('textbox', { name: /Change quantity/ });
     this.addToCartButton = page.getByRole('button', { name: /Add to cart/ });
-    this.cartBadge = page.locator('.blockcart .header-block__badge');
-    this.cartModal = page.getByRole('dialog', { name: 'Added to your cart' });
   }
 
   async goto() {
@@ -45,6 +46,6 @@ export class ProductPage {
       await this.setQuantity(variant.quantity);
     }
     await this.addToCartButton.click();
-    await this.cartModal.waitFor();
+    await this.cartModal.root.waitFor();
   }
 }

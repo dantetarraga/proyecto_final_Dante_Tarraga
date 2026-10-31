@@ -1,32 +1,55 @@
-import { expect, test } from '@playwright/test';
+import { defaultCustomer } from '../data/customers';
 import { hummingbirdTShirt, type ProductVariant } from '../data/products';
-import { ProductPage } from '../pages/ProductPage';
+import { expect, test } from '../fixtures';
 
 test.describe('Agregar al carrito', () => {
-  let productPage: ProductPage;
+  test.describe('como visitante', () => {
+    test.beforeEach(async ({ productPage }) => {
+      await productPage.goto();
+      await expect(productPage.name).toHaveText(hummingbirdTShirt.name);
+    });
 
-  test.beforeEach(async ({ page }) => {
-    productPage = new ProductPage(page);
-    await productPage.goto();
-    await expect(productPage.name).toHaveText(hummingbirdTShirt.name);
+    test('agrega el producto con la variante por defecto', { tag: '@smoke' }, async ({ productPage }) => {
+      await productPage.addToCart();
+
+      const { cartModal } = productPage;
+      await expect(cartModal.productName).toHaveText(hummingbirdTShirt.name);
+      await expect(cartModal.quantity).toContainText('1');
+      await expect(productPage.header.cartBadge).toHaveText('1');
+    });
+
+    test('agrega una variante elegida con varias unidades', async ({ productPage }) => {
+      const variant: ProductVariant = { size: 'M', color: 'Black', quantity: 2 };
+
+      await productPage.addToCart(variant);
+
+      const { cartModal } = productPage;
+      await expect(cartModal.size).toContainText(variant.size);
+      await expect(cartModal.color).toContainText(variant.color);
+      await expect(cartModal.quantity).toContainText(String(variant.quantity));
+      await expect(productPage.header.cartBadge).toHaveText(String(variant.quantity));
+    });
   });
 
-  test('agrega el producto con la variante por defecto', async () => {
-    await productPage.addToCart();
+  test.describe('con sesión iniciada', () => {
+    test.beforeEach(async ({ loggedIn, productPage }) => {
+      await productPage.goto();
+    });
 
-    await expect(productPage.cartModal).toContainText(hummingbirdTShirt.name);
-    await expect(productPage.cartModal).toContainText('Quantity: 1');
-    await expect(productPage.cartBadge).toHaveText('1');
-  });
+    test('agrega el producto y lo muestra en la página del carrito', { tag: '@smoke' }, async ({
+      page,
+      productPage,
+      cartPage,
+    }) => {
+      await expect(productPage.header.accountMenu(defaultCustomer.fullName)).toBeVisible();
 
-  test('agrega una variante elegida con varias unidades', async () => {
-    const variant: ProductVariant = { size: 'M', color: 'Black', quantity: 2 };
+      await productPage.addToCart();
+      await productPage.cartModal.proceedToCheckout();
 
-    await productPage.addToCart(variant);
-
-    await expect(productPage.cartModal).toContainText(`Size: ${variant.size}`);
-    await expect(productPage.cartModal).toContainText(`Color: ${variant.color}`);
-    await expect(productPage.cartModal).toContainText(`Quantity: ${variant.quantity}`);
-    await expect(productPage.cartBadge).toHaveText(String(variant.quantity));
+      await expect(page).toHaveURL(/\/cart\?action=show/);
+      await expect(cartPage.heading).toBeVisible();
+      await expect(cartPage.item(hummingbirdTShirt.name)).toBeVisible();
+      await expect(cartPage.item(hummingbirdTShirt.name)).toContainText(hummingbirdTShirt.unitPrice);
+    });
   });
 });
