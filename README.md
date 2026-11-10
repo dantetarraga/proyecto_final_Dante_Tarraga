@@ -33,11 +33,11 @@ proyecto_final_Dante_Tarraga/
 │   └── evidencias/                                         capturas de defectos, hallazgos y Jira
 ├── playwright.config.ts                             Módulo 2 · configuración de Playwright
 └── test/                                            Módulo 2 · pruebas automatizadas
-    ├── e2e/            specs: login.spec.ts y carrito.spec.ts
-    ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, CartPage)
-    ├── components/     componentes compartidos (HeaderComponent, CartModalComponent)
+    ├── e2e/            specs: login.spec.ts, carrito.spec.ts y catalogo.spec.ts
+    ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, ProductListPage, CartPage)
+    ├── components/     componentes compartidos (HeaderComponent, SearchBarComponent, CartModalComponent)
     ├── fixtures/       test extendido con los Page Objects y la sesión guardada por worker (customerSession, loggedIn)
-    ├── data/           datos de prueba (cliente desde .env, casos de login, producto y variantes)
+    ├── data/           datos de prueba (cliente desde .env, casos de login, producto, variantes y catálogo)
     └── support/        utilidades (requireEnv valida las variables del .env)
 ```
 
@@ -54,8 +54,9 @@ npm test
 
 | Comando | Uso |
 |---|---|
-| `npm test` | Corre toda la suite sin interfaz |
+| `npm test` | Corre toda la suite sin interfaz (excluye la demo `@flaky`) |
 | `npm run test:smoke` | Solo las pruebas etiquetadas `@smoke` |
+| `npm run test:flaky` | Corre 10 veces, sin reintentos, la demo de prueba inestable (`@flaky`) |
 | `npm run test:headed` | Corre la suite con el navegador visible |
 | `npm run report` | Abre el último reporte HTML |
 | `npm run typecheck` | Revisa los tipos de TypeScript |
@@ -63,6 +64,8 @@ npm test
 **URL de la tienda.** La demo crea una instancia temporal por visita. Abre https://demo.prestashop.com en el navegador, copia la URL de la tienda (por ejemplo `https://algo-algo.demo.prestashop.com`) en `BASE_URL` del `.env` y deja esa pestaña abierta mientras corren las pruebas: al cerrarla, la instancia se apaga.
 
 **Sesión guardada.** La fixture `customerSession` inicia sesión por la UI una sola vez por worker y guarda las cookies con `storageState`. Los tests que piden `loggedIn` reciben esas cookies y empiezan con la sesión abierta, sin repetir el login.
+
+**Esperas condicionales y pruebas inestables.** `catalogo.spec.ts` espera eventos concretos de la tienda (la respuesta AJAX, la URL o el valor esperado) en lugar de pausas fijas. La demo `@flaky` hace lo contrario a propósito: espera 1,8 s cuando la tienda tarda entre 1,5 y 2,2 s, así que el mismo código pasa unas veces y falla otras. `npm run test:flaky` la repite 10 veces para mostrarlo.
 
 **Credenciales.** Las pruebas usan el cliente de ejemplo de la demo (`pub@prestashop.com`), configurado en `.env`. El archivo `.env` no se versiona.
 
@@ -75,6 +78,10 @@ npm test
 | `carrito.spec.ts` | Visitante agrega el producto con la variante por defecto (`@smoke`) |
 | `carrito.spec.ts` | Visitante agrega talla M, color Black y 2 unidades |
 | `carrito.spec.ts` | Cliente con sesión iniciada agrega el producto y lo ve en el carrito (`@smoke`) |
+| `catalogo.spec.ts` | El autocompletado sugiere solo productos del término (`waitForResponse`) |
+| `catalogo.spec.ts` | Buscar con Enter abre los resultados (`waitForURL`, `@smoke`) |
+| `catalogo.spec.ts` | Ordenar por precio de menor a mayor (`expect.poll`) y de mayor a menor (`waitForResponse` + `toPass`) |
+| `catalogo.spec.ts` | Demo inestable: misma ordenación con espera fija (`@flaky`, fuera de `npm test`) |
 
 ## Entregables
 

@@ -8,9 +8,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "playwright test",
+    "test": "playwright test --grep-invert @flaky",
     "test:smoke": "playwright test --grep @smoke",
-    "test:headed": "playwright test --headed",
+    "test:flaky": "playwright test --grep @flaky --repeat-each 10 --retries 0",
+    "test:headed": "playwright test --headed --grep-invert @flaky",
     "report": "playwright show-report",
     "typecheck": "tsc --noEmit"
   },
