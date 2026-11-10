@@ -36,7 +36,7 @@ proyecto_final_Dante_Tarraga/
     ├── e2e/            specs: login.spec.ts y carrito.spec.ts
     ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, CartPage)
     ├── components/     componentes compartidos (HeaderComponent, CartModalComponent)
-    ├── fixtures/       test extendido con los Page Objects y la fixture loggedIn
+    ├── fixtures/       test extendido con los Page Objects y la sesión guardada por worker (customerSession, loggedIn)
     ├── data/           datos de prueba (cliente desde .env, casos de login, producto y variantes)
     └── support/        utilidades (requireEnv valida las variables del .env)
 ```
@@ -62,6 +62,8 @@ npm test
 
 **URL de la tienda.** La demo crea una instancia temporal por visita. Abre https://demo.prestashop.com en el navegador, copia la URL de la tienda (por ejemplo `https://algo-algo.demo.prestashop.com`) en `BASE_URL` del `.env` y deja esa pestaña abierta mientras corren las pruebas: al cerrarla, la instancia se apaga.
 
+**Sesión guardada.** La fixture `customerSession` inicia sesión por la UI una sola vez por worker y guarda las cookies con `storageState`. Los tests que piden `loggedIn` reciben esas cookies y empiezan con la sesión abierta, sin repetir el login.
+
 **Credenciales.** Las pruebas usan el cliente de ejemplo de la demo (`pub@prestashop.com`), configurado en `.env`. El archivo `.env` no se versiona.
 
 | Spec | Caso |
@@ -69,6 +71,7 @@ npm test
 | `login.spec.ts` | Login con credenciales válidas (`@smoke`) |
 | `login.spec.ts` | Data-driven: contraseña incorrecta y correo no registrado muestran "Authentication failed." |
 | `login.spec.ts` | Data-driven: correo vacío, correo sin @ y contraseña vacía los bloquea el navegador (validación HTML5) |
+| `login.spec.ts` | La sesión guardada abre Mi cuenta sin pasar por el formulario |
 | `carrito.spec.ts` | Visitante agrega el producto con la variante por defecto (`@smoke`) |
 | `carrito.spec.ts` | Visitante agrega talla M, color Black y 2 unidades |
 | `carrito.spec.ts` | Cliente con sesión iniciada agrega el producto y lo ve en el carrito (`@smoke`) |

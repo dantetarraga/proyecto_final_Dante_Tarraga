@@ -40,3 +40,12 @@ test.describe('Login', () => {
     });
   }
 });
+
+test.describe('Sesión guardada', () => {
+  test('abre Mi cuenta sin pasar por el formulario de login', async ({ loggedIn, page, myAccountPage }) => {
+    await page.goto('/my-account');
+
+    await expect(page).toHaveURL(/\/my-account$/);
+    await expect(myAccountPage.heading).toHaveText(`Welcome ${defaultCustomer.fullName}`);
+  });
+});

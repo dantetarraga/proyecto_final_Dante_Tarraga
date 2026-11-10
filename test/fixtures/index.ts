@@ -1,9 +1,11 @@
-import { test as base } from '@playwright/test';
+import { test as base, type BrowserContextOptions } from '@playwright/test';
 import { defaultCustomer } from '../data/customers';
 import { CartPage } from '../pages/CartPage';
 import { LoginPage } from '../pages/LoginPage';
 import { MyAccountPage } from '../pages/MyAccountPage';
 import { ProductPage } from '../pages/ProductPage';
+
+type StorageState = Exclude<BrowserContextOptions['storageState'], string | undefined>;
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -13,7 +15,11 @@ type Fixtures = {
   loggedIn: void;
 };
 
-export const test = base.extend<Fixtures>({
+type WorkerFixtures = {
+  customerSession: StorageState;
+};
+
+export const test = base.extend<Fixtures, WorkerFixtures>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
@@ -27,10 +33,26 @@ export const test = base.extend<Fixtures>({
     await use(new CartPage(page));
   },
 
-  loggedIn: async ({ loginPage, myAccountPage }, use) => {
-    await loginPage.goto();
-    await loginPage.login(defaultCustomer.email, defaultCustomer.password);
-    await myAccountPage.heading.filter({ hasText: defaultCustomer.fullName }).waitFor();
+  customerSession: [
+    async ({ browser }, use, workerInfo) => {
+      const context = await browser.newContext({ ...workerInfo.project.use });
+      const page = await context.newPage();
+      const loginPage = new LoginPage(page);
+      const myAccountPage = new MyAccountPage(page);
+
+      await loginPage.goto();
+      await loginPage.login(defaultCustomer.email, defaultCustomer.password);
+      await myAccountPage.heading.filter({ hasText: defaultCustomer.fullName }).waitFor();
+
+      const session = await context.storageState();
+      await context.close();
+      await use(session);
+    },
+    { scope: 'worker' },
+  ],
+
+  loggedIn: async ({ context, customerSession }, use) => {
+    await context.addCookies(customerSession.cookies);
     await use();
   },
 });
