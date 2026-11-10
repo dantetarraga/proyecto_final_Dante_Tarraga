@@ -1,8 +1,10 @@
 import { test as base, type BrowserContextOptions } from '@playwright/test';
 import { defaultCustomer } from '../data/customers';
 import { CartPage } from '../pages/CartPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
 import { LoginPage } from '../pages/LoginPage';
 import { MyAccountPage } from '../pages/MyAccountPage';
+import { OrderConfirmationPage } from '../pages/OrderConfirmationPage';
 import { ProductListPage } from '../pages/ProductListPage';
 import { ProductPage } from '../pages/ProductPage';
 
@@ -14,7 +16,10 @@ type Fixtures = {
   productPage: ProductPage;
   cartPage: CartPage;
   productListPage: ProductListPage;
+  checkoutPage: CheckoutPage;
+  orderConfirmationPage: OrderConfirmationPage;
   loggedIn: void;
+  checkoutWithProduct: CheckoutPage;
 };
 
 type WorkerFixtures = {
@@ -36,6 +41,12 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
   },
   productListPage: async ({ page }, use) => {
     await use(new ProductListPage(page));
+  },
+  checkoutPage: async ({ page }, use) => {
+    await use(new CheckoutPage(page));
+  },
+  orderConfirmationPage: async ({ page }, use) => {
+    await use(new OrderConfirmationPage(page));
   },
 
   customerSession: [
@@ -59,6 +70,14 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
   loggedIn: async ({ context, customerSession }, use) => {
     await context.addCookies(customerSession.cookies);
     await use();
+  },
+
+  checkoutWithProduct: async ({ loggedIn, cartPage, productPage, checkoutPage }, use) => {
+    await cartPage.removeAll();
+    await productPage.goto();
+    await productPage.addToCart();
+    await checkoutPage.goto();
+    await use(checkoutPage);
   },
 });
 

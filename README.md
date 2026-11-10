@@ -30,14 +30,14 @@ proyecto_final_Dante_Tarraga/
 │   ├── Matriz de trazabilidad v1 — PrestaShop.docx         Semana 3 · entregable
 │   ├── Reporte de defectos v1 — PrestaShop.docx            Semana 3 · entregable
 │   ├── Tabla de decisión v1 — PrestaShop.docx              Semana 3 · entregable
-│   └── evidencias/                                         capturas de defectos, hallazgos y Jira
+│   └── evidencias/                                         capturas de defectos, hallazgos, Jira y reporte de la suite
 ├── playwright.config.ts                             Módulo 2 · configuración de Playwright
 └── test/                                            Módulo 2 · pruebas automatizadas
-    ├── e2e/            specs: login.spec.ts, carrito.spec.ts y catalogo.spec.ts
-    ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, ProductListPage, CartPage)
+    ├── e2e/            specs: login.spec.ts, carrito.spec.ts, catalogo.spec.ts y checkout.spec.ts
+    ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, ProductListPage, CartPage, CheckoutPage, OrderConfirmationPage)
     ├── components/     componentes compartidos (HeaderComponent, SearchBarComponent, CartModalComponent)
     ├── fixtures/       test extendido con los Page Objects y la sesión guardada por worker (customerSession, loggedIn)
-    ├── data/           datos de prueba (cliente desde .env, casos de login, producto, variantes y catálogo)
+    ├── data/           datos de prueba (cliente desde .env, casos de login, producto, variantes, catálogo y pedidos del checkout)
     └── support/        utilidades (requireEnv valida las variables del .env)
 ```
 
@@ -63,6 +63,8 @@ npm test
 
 **URL de la tienda.** La demo crea una instancia temporal por visita. Abre https://demo.prestashop.com en el navegador, copia la URL de la tienda (por ejemplo `https://algo-algo.demo.prestashop.com`) en `BASE_URL` del `.env` y deja esa pestaña abierta mientras corren las pruebas: al cerrarla, la instancia se apaga.
 
+**Flujo transaccional data-driven.** `checkout.spec.ts` recorre carrito → sesión → dirección → envío → pago → confirmación. Cada fila de `checkoutOrders` en `test/data/checkout.ts` genera un test con su dirección, transportista, método de pago y montos esperados: para probar otra combinación se agrega una fila, sin tocar el código. La fixture `checkoutWithProduct` parte de la sesión guardada, vacía el carrito y deja el producto listo en el checkout.
+
 **Sesión guardada.** La fixture `customerSession` inicia sesión por la UI una sola vez por worker y guarda las cookies con `storageState`. Los tests que piden `loggedIn` reciben esas cookies y empiezan con la sesión abierta, sin repetir el login.
 
 **Esperas condicionales y pruebas inestables.** `catalogo.spec.ts` espera eventos concretos de la tienda (la respuesta AJAX, la URL o el valor esperado) en lugar de pausas fijas. La demo `@flaky` hace lo contrario a propósito: espera 1,8 s cuando la tienda tarda entre 1,5 y 2,2 s, así que el mismo código pasa unas veces y falla otras. `npm run test:flaky` la repite 10 veces para mostrarlo.
@@ -82,6 +84,9 @@ npm test
 | `catalogo.spec.ts` | Buscar con Enter abre los resultados (`waitForURL`, `@smoke`) |
 | `catalogo.spec.ts` | Ordenar por precio de menor a mayor (`expect.poll`) y de mayor a menor (`waitForResponse` + `toPass`) |
 | `catalogo.spec.ts` | Demo inestable: misma ordenación con espera fija (`@flaky`, fuera de `npm test`) |
+| `checkout.spec.ts` | Data-driven CK-09: compra completa con 3 combinaciones de dirección, envío y pago; valida referencia, método de pago, subtotal, envío y total (`@smoke`) |
+| `checkout.spec.ts` | CK-05: un código postal inválido muestra el error de formato y no deja continuar |
+| `checkout.spec.ts` | CK-08: sin aceptar los términos, "Place Order" queda deshabilitado |
 
 ## Entregables
 
@@ -99,6 +104,7 @@ npm test
 | 3 | Sesión exploratoria 1 (registro de cuenta, 2 defectos) | [sesion-exploratoria-1.md](docs/sesion-exploratoria-1.md) (capturas: `docs/evidencias/DEF-M01-*.png`) |
 | 3 | Casos del catálogo v1 (18 casos, 1 defecto) | [casos-catalogo-v1.md](docs/casos-catalogo-v1.md) (capturas: `docs/evidencias/DEF-M02-*.png` y `CC-*.png`) |
 | 3 | Casos del checkout v1 (9 casos y compra completa) | [casos-checkout-v1.md](docs/casos-checkout-v1.md) (captura del pedido: `docs/evidencias/CK-09-*.png`) |
+| Módulo 2 | **Suite con el flujo transaccional automatizado (data-driven)** | `test/` y `npm test` (evidencia: [reporte en verde, 19 de 19](docs/evidencias/AUTO-01-reporte-suite-verde.png)) |
 
 ## Estado al 21-oct-2026
 
