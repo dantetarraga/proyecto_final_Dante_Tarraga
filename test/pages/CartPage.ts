@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class CartPage extends BasePage {
@@ -17,5 +17,13 @@ export class CartPage extends BasePage {
 
   item(productName: string): Locator {
     return this.items.filter({ hasText: productName });
+  }
+
+  async removeAll() {
+    await this.goto();
+    for (let count = await this.items.count(); count > 0; count--) {
+      await this.items.first().locator('[data-link-action="delete-from-cart"]').click();
+      await expect(this.items).toHaveCount(count - 1);
+    }
   }
 }
