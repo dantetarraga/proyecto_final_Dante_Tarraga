@@ -3,6 +3,7 @@ import { defaultCustomer } from '../data/customers';
 import { CartPage } from '../pages/CartPage';
 import { LoginPage } from '../pages/LoginPage';
 import { MyAccountPage } from '../pages/MyAccountPage';
+import { ProductListPage } from '../pages/ProductListPage';
 import { ProductPage } from '../pages/ProductPage';
 
 type StorageState = Exclude<BrowserContextOptions['storageState'], string | undefined>;
@@ -12,6 +13,7 @@ type Fixtures = {
   myAccountPage: MyAccountPage;
   productPage: ProductPage;
   cartPage: CartPage;
+  productListPage: ProductListPage;
   loggedIn: void;
 };
 
@@ -31,6 +33,9 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
   },
   cartPage: async ({ page }, use) => {
     await use(new CartPage(page));
+  },
+  productListPage: async ({ page }, use) => {
+    await use(new ProductListPage(page));
   },
 
   customerSession: [
