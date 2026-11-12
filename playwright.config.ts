@@ -13,7 +13,11 @@ export default defineConfig({
   retries: 1,
   workers: 2,
 
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['json', { outputFile: 'results.json' }],
+  ],
 
   use: {
     baseURL: process.env.BASE_URL,
