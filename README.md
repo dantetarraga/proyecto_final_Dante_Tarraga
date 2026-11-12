@@ -37,7 +37,8 @@ proyecto_final_Dante_Tarraga/
     ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, CartPage)
     ├── components/     componentes compartidos (HeaderComponent, CartModalComponent)
     ├── fixtures/       test extendido con los Page Objects y la fixture loggedIn
-    └── data/           datos de prueba (cliente desde .env, producto y variantes)
+    ├── data/           datos de prueba (cliente desde .env, casos de login, producto y variantes)
+    └── support/        utilidades (requireEnv valida las variables del .env)
 ```
 
 ## Pruebas automatizadas (Playwright)
@@ -66,7 +67,8 @@ npm test
 | Spec | Caso |
 |---|---|
 | `login.spec.ts` | Login con credenciales válidas (`@smoke`) |
-| `login.spec.ts` | Login con contraseña incorrecta muestra "Authentication failed." |
+| `login.spec.ts` | Data-driven: contraseña incorrecta y correo no registrado muestran "Authentication failed." |
+| `login.spec.ts` | Data-driven: correo vacío, correo sin @ y contraseña vacía los bloquea el navegador (validación HTML5) |
 | `carrito.spec.ts` | Visitante agrega el producto con la variante por defecto (`@smoke`) |
 | `carrito.spec.ts` | Visitante agrega talla M, color Black y 2 unidades |
 | `carrito.spec.ts` | Cliente con sesión iniciada agrega el producto y lo ve en el carrito (`@smoke`) |

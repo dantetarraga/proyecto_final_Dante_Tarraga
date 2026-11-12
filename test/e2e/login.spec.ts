@@ -1,4 +1,4 @@
-import { defaultCustomer, wrongPassword } from '../data/customers';
+import { browserBlockedLogins, defaultCustomer, serverRejectedLogins } from '../data/customers';
 import { expect, test } from '../fixtures';
 
 test.describe('Login', () => {
@@ -19,11 +19,24 @@ test.describe('Login', () => {
     await expect(myAccountPage.header.accountMenu(defaultCustomer.fullName)).toBeVisible();
   });
 
-  test('rechaza una contraseña incorrecta', async ({ page, loginPage }) => {
-    await loginPage.login(defaultCustomer.email, wrongPassword);
+  for (const { id, title, email, password } of serverRejectedLogins) {
+    test(`${id}: rechaza ${title}`, async ({ page, loginPage }) => {
+      await loginPage.login(email ?? defaultCustomer.email, password ?? defaultCustomer.password);
 
-    await expect(page).toHaveURL(/\/login/);
-    await expect(loginPage.errorAlert).toHaveText('Authentication failed.');
-    await expect(loginPage.header.accountMenu(defaultCustomer.fullName)).toBeHidden();
-  });
+      await expect(page).toHaveURL(/\/login/);
+      await expect(loginPage.errorAlert).toHaveText('Authentication failed.');
+      await expect(loginPage.header.accountMenu(defaultCustomer.fullName)).toBeHidden();
+    });
+  }
+
+  for (const { id, title, email, password, invalidField, validity } of browserBlockedLogins) {
+    test(`${id}: el navegador bloquea el envío con ${title}`, async ({ page, loginPage }) => {
+      await loginPage.login(email ?? defaultCustomer.email, password ?? defaultCustomer.password);
+
+      const field = invalidField === 'email' ? loginPage.emailInput : loginPage.passwordInput;
+      await expect(field).toHaveJSProperty(`validity.${validity}`, true);
+      await expect(page).toHaveURL(/\/login/);
+      await expect(loginPage.errorAlert).toBeHidden();
+    });
+  }
 });
