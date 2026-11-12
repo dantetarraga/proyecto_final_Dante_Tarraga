@@ -8,7 +8,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "playwright test --grep-invert @flaky",
+    "test": "playwright test --project=chromium --grep-invert @flaky",
     "test:smoke": "playwright test --grep @smoke",
     "test:flaky": "playwright test --grep @flaky --repeat-each 10 --retries 0",
     "test:headed": "playwright test --headed --grep-invert @flaky",

@@ -9,6 +9,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/results.json
 
 # Variables de entorno locales
 .env

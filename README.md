@@ -54,7 +54,7 @@ npm test
 
 | Comando | Uso |
 |---|---|
-| `npm test` | Corre toda la suite sin interfaz (excluye la demo `@flaky`) |
+| `npm test` | Corre toda la suite en Chromium (`--project=chromium`) sin interfaz y excluye la demo `@flaky` |
 | `npm run test:smoke` | Solo las pruebas etiquetadas `@smoke` |
 | `npm run test:flaky` | Corre 10 veces, sin reintentos, la demo de prueba inestable (`@flaky`) |
 | `npm run test:headed` | Corre la suite con el navegador visible |
@@ -68,6 +68,10 @@ npm test
 **Sesión guardada.** La fixture `customerSession` inicia sesión por la UI una sola vez por worker y guarda las cookies con `storageState`. Los tests que piden `loggedIn` reciben esas cookies y empiezan con la sesión abierta, sin repetir el login.
 
 **Esperas condicionales y pruebas inestables.** `catalogo.spec.ts` espera eventos concretos de la tienda (la respuesta AJAX, la URL o el valor esperado) en lugar de pausas fijas. La demo `@flaky` hace lo contrario a propósito: espera 1,8 s cuando la tienda tarda entre 1,5 y 2,2 s, así que el mismo código pasa unas veces y falla otras. `npm run test:flaky` la repite 10 veces para mostrarlo.
+
+**Reporte y evidencia.** Cada corrida genera tres salidas: `list` en la terminal, el reporte HTML en `playwright-report/` (`open: "never"`, se abre con `npm run report`) y `results.json` con los mismos resultados para leerlos con código. Ante un fallo quedan la captura (`screenshot: "only-on-failure"`) y el video, y el trace se graba en el primer reintento (`trace: "on-first-retry"`). Las tres salidas y `test-results/` no se versionan. Las pruebas del checkout dividen el flujo en pasos (`test.step`) y adjuntan al reporte la captura del pedido confirmado.
+
+**Reintentos.** La configuración permite 1 reintento, pero solo para las pruebas que no crean pedidos. `checkout.spec.ts` corre sin reintentos (`test.describe.configure({ retries: 0 })`): reintentar una compra crearía un segundo pedido y escondería el fallo real.
 
 **Credenciales.** Las pruebas usan el cliente de ejemplo de la demo (`pub@prestashop.com`), configurado en `.env`. El archivo `.env` no se versiona.
 
@@ -104,7 +108,7 @@ npm test
 | 3 | Sesión exploratoria 1 (registro de cuenta, 2 defectos) | [sesion-exploratoria-1.md](docs/sesion-exploratoria-1.md) (capturas: `docs/evidencias/DEF-M01-*.png`) |
 | 3 | Casos del catálogo v1 (18 casos, 1 defecto) | [casos-catalogo-v1.md](docs/casos-catalogo-v1.md) (capturas: `docs/evidencias/DEF-M02-*.png` y `CC-*.png`) |
 | 3 | Casos del checkout v1 (9 casos y compra completa) | [casos-checkout-v1.md](docs/casos-checkout-v1.md) (captura del pedido: `docs/evidencias/CK-09-*.png`) |
-| Módulo 2 | **Suite con el flujo transaccional automatizado (data-driven)** | `test/` y `npm test` (evidencia: [reporte en verde, 19 de 19](docs/evidencias/AUTO-01-reporte-suite-verde.png)) |
+| Módulo 2 | **Suite con el flujo transaccional automatizado (data-driven)** | `test/` y `npm test` (evidencia: [pantalla principal del reporte, 19 de 19](docs/evidencias/AUTO-01-reporte-suite-verde.png) y [pasos de CK-09-A con la captura del pedido](docs/evidencias/AUTO-02-reporte-checkout-pasos.png)) |
 
 ## Estado al 21-oct-2026
 

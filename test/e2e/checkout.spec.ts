@@ -3,28 +3,46 @@ import { hummingbirdTShirt } from '../data/products';
 import { expect, test } from '../fixtures';
 
 test.describe('Checkout con sesión iniciada', () => {
+  test.describe.configure({ retries: 0 });
+
   for (const { id, title, address, carrier, payment, expected } of checkoutOrders) {
     test(`${id}: confirma el pedido (${title})`, { tag: '@smoke' }, async ({
+      page,
       checkoutWithProduct: checkout,
       orderConfirmationPage: confirmation,
     }) => {
-      await checkout.selectAddress(address.alias);
-      await checkout.continueToShipping();
-      await checkout.selectCarrier(carrier);
-      await checkout.continueToPayment();
-      await checkout.selectPayment(payment);
-      await checkout.acceptTerms();
-      await checkout.placeOrder();
+      await test.step(`Dirección: ${address.country}`, async () => {
+        await checkout.selectAddress(address.alias);
+        await checkout.continueToShipping();
+      });
 
-      await expect(confirmation.heading).toHaveText('Your order is confirmed');
-      await expect(confirmation.reference).toBeVisible();
-      await expect(confirmation.products).toHaveCount(1);
-      await expect(confirmation.products).toContainText(hummingbirdTShirt.name);
-      await expect(confirmation.detail('Payment method')).toHaveText(`Payment method: ${expected.paymentMethod}`);
-      await expect(confirmation.detail('Shipping method')).toContainText(carrier);
-      await expect(confirmation.amount('Subtotal')).toHaveText(expected.subtotal);
-      await expect(confirmation.amount('Shipping and handling')).toHaveText(expected.shipping);
-      await expect(confirmation.amount('Total')).toHaveText(expected.total);
+      await test.step(`Envío: ${carrier}`, async () => {
+        await checkout.selectCarrier(carrier);
+        await checkout.continueToPayment();
+      });
+
+      await test.step(`Pago: ${payment}`, async () => {
+        await checkout.selectPayment(payment);
+        await checkout.acceptTerms();
+        await checkout.placeOrder();
+      });
+
+      await test.step('Confirmación del pedido', async () => {
+        await expect(confirmation.heading).toHaveText('Your order is confirmed');
+        await expect(confirmation.reference).toBeVisible();
+        await expect(confirmation.products).toHaveCount(1);
+        await expect(confirmation.products).toContainText(hummingbirdTShirt.name);
+        await expect(confirmation.detail('Payment method')).toHaveText(`Payment method: ${expected.paymentMethod}`);
+        await expect(confirmation.detail('Shipping method')).toContainText(carrier);
+        await expect(confirmation.amount('Subtotal')).toHaveText(expected.subtotal);
+        await expect(confirmation.amount('Shipping and handling')).toHaveText(expected.shipping);
+        await expect(confirmation.amount('Total')).toHaveText(expected.total);
+
+        await test.info().attach(`${id}-pedido-confirmado`, {
+          body: await page.screenshot({ fullPage: true }),
+          contentType: 'image/png',
+        });
+      });
     });
   }
 
