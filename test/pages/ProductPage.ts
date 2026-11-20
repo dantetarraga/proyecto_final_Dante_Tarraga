@@ -1,6 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { CartModalComponent } from '../components/CartModalComponent';
-import { hummingbirdTShirt, type ProductVariant } from '../data/products';
+import { hummingbirdTShirt, type Product, type ProductVariant } from '../data/products';
 import { BasePage } from './BasePage';
 
 export class ProductPage extends BasePage {
@@ -18,11 +18,11 @@ export class ProductPage extends BasePage {
     this.sizeSelect = page.getByRole('combobox', { name: 'Size' });
     this.colorOptions = page.getByRole('radiogroup', { name: 'Color' });
     this.quantityInput = page.getByRole('textbox', { name: /Change quantity/ });
-    this.addToCartButton = page.getByRole('button', { name: /Add to cart/ });
+    this.addToCartButton = page.locator('.product__add-to-cart-button');
   }
 
-  async goto() {
-    await this.page.goto(hummingbirdTShirt.path);
+  async goto(product: Product = hummingbirdTShirt) {
+    await this.page.goto(product.path);
   }
 
   async selectSize(size: ProductVariant['size']) {

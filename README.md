@@ -30,50 +30,94 @@ proyecto_final_Dante_Tarraga/
 │   ├── Matriz de trazabilidad v1 — PrestaShop.docx         Semana 3 · entregable
 │   ├── Reporte de defectos v1 — PrestaShop.docx            Semana 3 · entregable
 │   ├── Tabla de decisión v1 — PrestaShop.docx              Semana 3 · entregable
-│   └── evidencias/                                         capturas de defectos, hallazgos, Jira y reporte de la suite
-├── playwright.config.ts                             Módulo 2 · configuración de Playwright
+│   └── evidencias/                                         capturas de defectos, hallazgos, Jira y reportes de la suite
+├── playwright.config.ts                             Módulo 2 · configuración de Playwright y reporteros
+├── allurerc.mjs                                     Módulo 2 · configuración del reporte Allure
+├── scripts/metrics.mjs                              Módulo 2 · métricas de la última corrida
+├── .env.example                                     plantilla de variables de entorno
 └── test/                                            Módulo 2 · pruebas automatizadas
     ├── e2e/            specs: login.spec.ts, carrito.spec.ts, catalogo.spec.ts y checkout.spec.ts
     ├── pages/          Page Objects (BasePage, LoginPage, MyAccountPage, ProductPage, ProductListPage, CartPage, CheckoutPage, OrderConfirmationPage)
     ├── components/     componentes compartidos (HeaderComponent, SearchBarComponent, CartModalComponent)
-    ├── fixtures/       test extendido con los Page Objects y la sesión guardada por worker (customerSession, loggedIn)
-    ├── data/           datos de prueba (cliente desde .env, casos de login, producto, variantes, catálogo y pedidos del checkout)
+    ├── fixtures/       test extendido con los Page Objects, la sesión guardada por worker y el carrito del cliente
+    ├── data/           datos de prueba (cliente desde .env, casos de login, productos, variantes, catálogo y pedidos del checkout)
     └── support/        utilidades (requireEnv valida las variables del .env)
 ```
 
-## Pruebas automatizadas (Playwright)
+## Suite web automatizada (Playwright)
 
-Requisitos: Node.js 20 o superior (el repositorio trae `.nvmrc` con la versión 24). Las pruebas corren solo en Chromium.
+Suite end-to-end sobre la tienda de PrestaShop: autenticación, carrito, catálogo y checkout completo hasta el pedido confirmado. Usa TypeScript, Page Object Model, fixtures y datos en archivos aparte, y deja un reporte de cada ejecución.
+
+### Requisitos
+
+- Node.js 24 (el repositorio trae `.nvmrc`; con nvm: `nvm use`)
+- npm
+- Chromium de Playwright (se instala con el comando de abajo)
+
+### Instalación
 
 ```bash
 npm install
 npx playwright install chromium
 cp .env.example .env
-npm test
 ```
+
+### Configuración del entorno
+
+| Variable | Uso |
+|---|---|
+| `BASE_URL` | URL de la tienda temporal de la demo |
+| `CUSTOMER_EMAIL`, `CUSTOMER_PASSWORD`, `CUSTOMER_NAME` | Cliente de ejemplo de la demo (`pub@prestashop.com`) |
+
+La demo crea una instancia temporal por visita. Abre https://demo.prestashop.com en el navegador, copia la URL de la tienda (por ejemplo `https://algo-algo.demo.prestashop.com`) en `BASE_URL` y deja esa pestaña abierta mientras corren las pruebas: al cerrarla, la instancia se apaga. Si falta una variable, la suite se detiene con un mensaje que la nombra (`requireEnv`). El archivo `.env` no se versiona.
+
+### Scripts
 
 | Comando | Uso |
 |---|---|
-| `npm test` | Corre toda la suite en Chromium (`--project=chromium`) sin interfaz y excluye la demo `@flaky` |
+| `npm test` | Corre toda la suite en Chromium (`--project=chromium`) sin interfaz y excluye la demo `@flaky`. Antes borra los resultados de Allure de la corrida anterior |
 | `npm run test:smoke` | Solo las pruebas etiquetadas `@smoke` |
+| `npm run test:headed` | La suite con el navegador visible |
 | `npm run test:flaky` | Corre 10 veces, sin reintentos, la demo de prueba inestable (`@flaky`) |
-| `npm run test:headed` | Corre la suite con el navegador visible |
-| `npm run report` | Abre el último reporte HTML |
+| `npm run report` | Abre el reporte HTML de Playwright de la última corrida |
+| `npm run report:allure` | Genera el reporte Allure (con el historial de corridas) y lo abre |
+| `npm run metrics` | Imprime la tabla de métricas de la última corrida, leída de `results.json` |
 | `npm run typecheck` | Revisa los tipos de TypeScript |
 
-**URL de la tienda.** La demo crea una instancia temporal por visita. Abre https://demo.prestashop.com en el navegador, copia la URL de la tienda (por ejemplo `https://algo-algo.demo.prestashop.com`) en `BASE_URL` del `.env` y deja esa pestaña abierta mientras corren las pruebas: al cerrarla, la instancia se apaga.
+### Reportes
 
-**Flujo transaccional data-driven.** `checkout.spec.ts` recorre carrito → sesión → dirección → envío → pago → confirmación. Cada fila de `checkoutOrders` en `test/data/checkout.ts` genera un test con su dirección, transportista, método de pago y montos esperados: para probar otra combinación se agrega una fila, sin tocar el código. La fixture `checkoutWithProduct` parte de la sesión guardada, vacía el carrito y deja el producto listo en el checkout.
+Cada corrida deja cuatro salidas; ninguna se versiona:
 
-**Sesión guardada.** La fixture `customerSession` inicia sesión por la UI una sola vez por worker y guarda las cookies con `storageState`. Los tests que piden `loggedIn` reciben esas cookies y empiezan con la sesión abierta, sin repetir el login.
+| Salida | Dónde | Para qué |
+|---|---|---|
+| `list` | Terminal | Una línea por prueba mientras corre |
+| HTML de Playwright | `playwright-report/` (`open: "never"`) | Pasos, capturas, video y trace de cada prueba |
+| JSON | `results.json` | Los mismos resultados para leerlos con código (`npm run metrics`) |
+| Allure | `allure-results/` → `allure-report/` | Resumen con gráficos; `allure-history.jsonl` acumula las corridas y muestra la tendencia |
 
-**Esperas condicionales y pruebas inestables.** `catalogo.spec.ts` espera eventos concretos de la tienda (la respuesta AJAX, la URL o el valor esperado) en lugar de pausas fijas. La demo `@flaky` hace lo contrario a propósito: espera 1,8 s cuando la tienda tarda entre 1,5 y 2,2 s, así que el mismo código pasa unas veces y falla otras. `npm run test:flaky` la repite 10 veces para mostrarlo.
+Ante un fallo quedan la captura (`screenshot: "only-on-failure"`) y el video, y el trace se graba en el primer reintento (`trace: "on-first-retry"`). Las pruebas del checkout dividen el flujo en pasos (`test.step`) y adjuntan la captura del pedido confirmado.
 
-**Reporte y evidencia.** Cada corrida genera tres salidas: `list` en la terminal, el reporte HTML en `playwright-report/` (`open: "never"`, se abre con `npm run report`) y `results.json` con los mismos resultados para leerlos con código. Ante un fallo quedan la captura (`screenshot: "only-on-failure"`) y el video, y el trace se graba en el primer reintento (`trace: "on-first-retry"`). Las tres salidas y `test-results/` no se versionan. Las pruebas del checkout dividen el flujo en pasos (`test.step`) y adjuntan al reporte la captura del pedido confirmado.
+### Métricas de la última corrida
 
-**Reintentos.** La configuración permite 1 reintento, pero solo para las pruebas que no crean pedidos. `checkout.spec.ts` corre sin reintentos (`test.describe.configure({ retries: 0 })`): reintentar una compra crearía un segundo pedido y escondería el fallo real.
+Salida de `npm run metrics` tras `npm test`:
 
-**Credenciales.** Las pruebas usan el cliente de ejemplo de la demo (`pub@prestashop.com`), configurado en `.env`. El archivo `.env` no se versiona.
+| Métrica | Valor |
+|---|---:|
+| Fecha de la corrida | 20/11/2026, 9:24:42 a. m. |
+| Navegador | chromium |
+| Archivos de prueba | 4 |
+| Pruebas ejecutadas | 20 |
+| Aprobadas | 20 |
+| Fallidas | 0 |
+| Inestables (flaky) | 0 |
+| Omitidas | 0 |
+| Pruebas reintentadas | 0 |
+| Tasa de aprobación | 100.0 % |
+| Duración | 74.0 s |
+
+Evidencia de la corrida: [reporte HTML](docs/evidencias/AUTO-01-reporte-suite-verde.png), [pasos de CK-09-A](docs/evidencias/AUTO-02-reporte-checkout-pasos.png) y [resumen de Allure](docs/evidencias/AUTO-03-allure-resumen.png).
+
+### Casos automatizados
 
 | Spec | Caso |
 |---|---|
@@ -88,9 +132,35 @@ npm test
 | `catalogo.spec.ts` | Buscar con Enter abre los resultados (`waitForURL`, `@smoke`) |
 | `catalogo.spec.ts` | Ordenar por precio de menor a mayor (`expect.poll`) y de mayor a menor (`waitForResponse` + `toPass`) |
 | `catalogo.spec.ts` | Demo inestable: misma ordenación con espera fija (`@flaky`, fuera de `npm test`) |
-| `checkout.spec.ts` | Data-driven CK-09: compra completa con 3 combinaciones de dirección, envío y pago; valida referencia, método de pago, subtotal, envío y total (`@smoke`) |
+| `checkout.spec.ts` | Data-driven CK-09-A a CK-09-C: compra completa con 3 combinaciones de dirección, envío y pago (`@smoke`) |
+| `checkout.spec.ts` | Data-driven CK-09-D: compra de 3 productos; valida cada producto, subtotal, envío y total (`@smoke`) |
 | `checkout.spec.ts` | CK-05: un código postal inválido muestra el error de formato y no deja continuar |
 | `checkout.spec.ts` | CK-08: sin aceptar los términos, "Place Order" queda deshabilitado |
+
+### Decisiones de diseño
+
+**Flujo transaccional data-driven.** `checkout.spec.ts` recorre carrito → sesión → dirección → envío → pago → confirmación. Cada fila de `checkoutOrders` en `test/data/checkout.ts` genera un test con sus productos, dirección, transportista, método de pago y montos esperados: para probar otra combinación se agrega una fila, sin tocar el código. La fixture `customerCart` parte de la sesión guardada y vacía el carrito; los pedidos con varios productos se marcan con `test.slow()`.
+
+**Sesión guardada.** La fixture `customerSession` inicia sesión por la UI una sola vez por worker y guarda las cookies con `storageState`. Los tests que piden `loggedIn` reciben esas cookies y empiezan con la sesión abierta, sin repetir el login.
+
+**Esperas condicionales y pruebas inestables.** Las pruebas esperan eventos concretos de la tienda (la respuesta AJAX, la URL o el valor esperado) en lugar de pausas fijas. La demo `@flaky` hace lo contrario a propósito: espera 1,8 s cuando la tienda tarda entre 1,5 y 2,2 s, así que el mismo código pasa unas veces y falla otras.
+
+**Reintentos.** La configuración permite 1 reintento, pero solo para las pruebas que no crean pedidos. `checkout.spec.ts` corre sin reintentos (`test.describe.configure({ retries: 0 })`): reintentar una compra crearía un segundo pedido y escondería el fallo real.
+
+### Checklist del entregable
+
+- [x] Autenticación: login válido, 5 casos inválidos data-driven y sesión guardada
+- [x] Dos flujos adicionales: carrito y checkout completo hasta el pedido confirmado (más el catálogo)
+- [x] Mantenibilidad: Page Objects, componentes, fixtures y datos fuera de las pruebas
+- [x] Data-driven: login inválido y pedidos del checkout leídos de `test/data/`
+- [x] Configuración: reporter HTML con `open: "never"`, `screenshot: "only-on-failure"` y `trace: "on-first-retry"`
+- [x] `.gitignore`: `playwright-report/`, `test-results/`, `results.json`, salidas de Allure y `.env`
+- [x] Corrida completa con `--project=chromium` (`npm test`) y reporte abierto (`npm run report`, `npm run report:allure`)
+- [x] Reintentos solo en pruebas que no crean pedidos; checkout sin reintentos
+- [x] Evidencia del reporte en `docs/evidencias/` (AUTO-01 a AUTO-03)
+- [x] Métricas medidas con `npm run metrics`
+- [x] README con requisitos, instalación, configuración, scripts, reportes y métricas
+- [x] Tipos revisados con `npm run typecheck`
 
 ## Entregables
 
@@ -108,7 +178,8 @@ npm test
 | 3 | Sesión exploratoria 1 (registro de cuenta, 2 defectos) | [sesion-exploratoria-1.md](docs/sesion-exploratoria-1.md) (capturas: `docs/evidencias/DEF-M01-*.png`) |
 | 3 | Casos del catálogo v1 (18 casos, 1 defecto) | [casos-catalogo-v1.md](docs/casos-catalogo-v1.md) (capturas: `docs/evidencias/DEF-M02-*.png` y `CC-*.png`) |
 | 3 | Casos del checkout v1 (9 casos y compra completa) | [casos-checkout-v1.md](docs/casos-checkout-v1.md) (captura del pedido: `docs/evidencias/CK-09-*.png`) |
-| Módulo 2 | **Suite con el flujo transaccional automatizado (data-driven)** | `test/` y `npm test` (evidencia: [pantalla principal del reporte, 19 de 19](docs/evidencias/AUTO-01-reporte-suite-verde.png) y [pasos de CK-09-A con la captura del pedido](docs/evidencias/AUTO-02-reporte-checkout-pasos.png)) |
+| Módulo 2 | **Suite con el flujo transaccional automatizado (data-driven)** | `test/` y `npm test` (evidencia: [pantalla principal del reporte](docs/evidencias/AUTO-01-reporte-suite-verde.png) y [pasos de CK-09-A con la captura del pedido](docs/evidencias/AUTO-02-reporte-checkout-pasos.png)) |
+| Módulo 2 | **Suite web completa con reporte de ejecución** (métricas, README, scripts y checklist) | [Suite web automatizada](#suite-web-automatizada-playwright) (evidencia: [resumen de Allure, 20 de 20](docs/evidencias/AUTO-03-allure-resumen.png)) |
 
 ## Estado al 21-oct-2026
 

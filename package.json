@@ -8,11 +8,14 @@
     "node": ">=20"
   },
   "scripts": {
+    "pretest": "node -e \"require('fs').rmSync('allure-results', { recursive: true, force: true })\"",
     "test": "playwright test --project=chromium --grep-invert @flaky",
-    "test:smoke": "playwright test --grep @smoke",
-    "test:flaky": "playwright test --grep @flaky --repeat-each 10 --retries 0",
-    "test:headed": "playwright test --headed --grep-invert @flaky",
+    "test:smoke": "playwright test --project=chromium --grep @smoke",
+    "test:flaky": "playwright test --project=chromium --grep @flaky --repeat-each 10 --retries 0",
+    "test:headed": "playwright test --project=chromium --headed --grep-invert @flaky",
     "report": "playwright show-report",
+    "report:allure": "allure generate allure-results --clean && allure open",
+    "metrics": "node scripts/metrics.mjs",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
@@ -27,6 +30,8 @@
   "devDependencies": {
     "@playwright/test": "^1.64.1",
     "@types/node": "^26.6.6",
+    "allure": "^3.33.0",
+    "allure-playwright": "^3.15.0",
     "dotenv": "^18.0.9",
     "typescript": "^7.0.2"
   }

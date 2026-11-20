@@ -10,6 +10,9 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /results.json
+/allure-results/
+/allure-report/
+/allure-history.jsonl
 
 # Variables de entorno locales
 .env
