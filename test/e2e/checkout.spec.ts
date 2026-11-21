@@ -1,16 +1,29 @@
 import { checkoutOrders, franceAddress, invalidPostcodeAddress } from '../data/checkout';
-import { hummingbirdTShirt } from '../data/products';
 import { expect, test } from '../fixtures';
 
 test.describe('Checkout con sesión iniciada', () => {
   test.describe.configure({ retries: 0 });
 
-  for (const { id, title, address, carrier, payment, expected } of checkoutOrders) {
+  for (const { id, title, products, address, carrier, payment, expected } of checkoutOrders) {
     test(`${id}: confirma el pedido (${title})`, { tag: '@smoke' }, async ({
       page,
-      checkoutWithProduct: checkout,
+      customerCart,
+      productPage,
+      checkoutPage: checkout,
       orderConfirmationPage: confirmation,
     }) => {
+      test.slow(products.length > 1, 'Agrega varios productos antes del checkout');
+
+      await test.step(`Carrito: ${products.length} producto(s)`, async () => {
+        for (const product of products) {
+          await productPage.goto(product);
+          await productPage.addToCart();
+        }
+        await customerCart.goto();
+        await expect(customerCart.items).toHaveCount(products.length);
+        await checkout.goto();
+      });
+
       await test.step(`Dirección: ${address.country}`, async () => {
         await checkout.selectAddress(address.alias);
         await checkout.continueToShipping();
@@ -30,8 +43,8 @@ test.describe('Checkout con sesión iniciada', () => {
       await test.step('Confirmación del pedido', async () => {
         await expect(confirmation.heading).toHaveText('Your order is confirmed');
         await expect(confirmation.reference).toBeVisible();
-        await expect(confirmation.products).toHaveCount(1);
-        await expect(confirmation.products).toContainText(hummingbirdTShirt.name);
+        await expect(confirmation.products).toHaveCount(products.length);
+        await expect(confirmation.products).toContainText(products.map((product) => product.name));
         await expect(confirmation.detail('Payment method')).toHaveText(`Payment method: ${expected.paymentMethod}`);
         await expect(confirmation.detail('Shipping method')).toContainText(carrier);
         await expect(confirmation.amount('Subtotal')).toHaveText(expected.subtotal);

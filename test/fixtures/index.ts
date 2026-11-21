@@ -19,6 +19,7 @@ type Fixtures = {
   checkoutPage: CheckoutPage;
   orderConfirmationPage: OrderConfirmationPage;
   loggedIn: void;
+  customerCart: CartPage;
   checkoutWithProduct: CheckoutPage;
 };
 
@@ -72,8 +73,12 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
     await use();
   },
 
-  checkoutWithProduct: async ({ loggedIn, cartPage, productPage, checkoutPage }, use) => {
+  customerCart: async ({ loggedIn, cartPage }, use) => {
     await cartPage.removeAll();
+    await use(cartPage);
+  },
+
+  checkoutWithProduct: async ({ customerCart, productPage, checkoutPage }, use) => {
     await productPage.goto();
     await productPage.addToCart();
     await checkoutPage.goto();
